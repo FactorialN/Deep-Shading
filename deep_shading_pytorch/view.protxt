@@ -1,0 +1,543 @@
+# Enter your network definition here.
+# Use Shift+Enter to update the visualization.
+
+name: "ShadingNet"
+
+
+
+
+layer {
+  name: "concat_input"
+  type: "Input"
+  top: "data_input"
+  input_param { shape: { dim: 45 dim: 7 dim: 256 dim: 256 } }
+}
+
+## Actual network
+
+## Level 0, down part
+
+layer {
+	name: "down_level_0_conv"
+	type: "Convolution"
+	bottom: "data_input"
+	top: "down_level_0_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 16
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.011
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "down_level_0_relu"
+	type: "ReLU"
+	bottom: "down_level_0_conv_top"
+	top: "down_level_0_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+layer {
+  name: "down_level_0_to_1"
+  type: "Pooling"
+  bottom: "down_level_0_relu"
+  top: "down_level_1_input"
+  pooling_param {
+    pool: AVE
+    kernel_size: 2 # pool over a 2x2 region
+    stride: 2      # step two pixels between pooling regions
+  }
+}
+
+
+## Level 1, down part
+
+layer {
+	name: "down_level_1_conv"
+	type: "Convolution"
+	bottom: "down_level_1_input"
+	top: "down_level_1_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 32
+		group: 2
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.011
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "down_level_1_relu"
+	type: "ReLU"
+	bottom: "down_level_1_conv_top"
+	top: "down_level_1_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+layer {
+  name: "down_level_1_to_2"
+  type: "Pooling"
+  bottom: "down_level_1_relu"
+  top: "down_level_2_input"
+  pooling_param {
+    pool: AVE
+    kernel_size: 2 # pool over a 2x2 region
+    stride: 2      # step two pixels between pooling regions
+  }
+}
+
+
+## Level 2, down part
+
+layer {
+	name: "down_level_2_conv"
+	type: "Convolution"
+	bottom: "down_level_2_input"
+	top: "down_level_2_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 64
+		group: 4
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.011
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "down_level_2_relu"
+	type: "ReLU"
+	bottom: "down_level_2_conv_top"
+	top: "down_level_2_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+layer {
+  name: "down_level_2_to_3"
+  type: "Pooling"
+  bottom: "down_level_2_relu"
+  top: "down_level_3_input"
+  pooling_param {
+    pool: AVE
+    kernel_size: 2 # pool over a 2x2 region
+    stride: 2      # step two pixels between pooling regions
+  }
+}
+
+
+## Level 3, down part
+
+layer {
+	name: "down_level_3_conv"
+	type: "Convolution"
+	bottom: "down_level_3_input"
+	top: "down_level_3_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 128
+		group: 8
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.011
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "down_level_3_relu"
+	type: "ReLU"
+	bottom: "down_level_3_conv_top"
+	top: "down_level_3_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+layer {
+  name: "down_level_3_to_4"
+  type: "Pooling"
+  bottom: "down_level_3_relu"
+  top: "down_level_4_input"
+  pooling_param {
+    pool: AVE
+    kernel_size: 2 # pool over a 2x2 region
+    stride: 2      # step two pixels between pooling regions
+  }
+}
+
+
+
+## Level 4, down part, bottom of the network
+
+layer {
+	name: "down_level_4_conv"
+	type: "Convolution"
+	bottom: "down_level_4_input"
+	top: "down_level_4_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 256
+		group: 16
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.011
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "down_level_4_relu"
+	type: "ReLU"
+	bottom: "down_level_4_conv_top"
+	top: "down_level_4_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+
+## Level 3, up part
+
+layer {
+  name: "up_level_4_to_3"
+  type: "Deconvolution"
+  bottom: "down_level_4_relu"
+  top: "up_level_3_input"
+  convolution_param {
+    kernel_size: 4
+	stride: 2
+    pad: 1
+    num_output: 256
+	group: 256
+    weight_filler {
+		type: "bilinear"
+	}
+	bias_term: false
+  }
+  param {
+	lr_mult: 0
+	decay_mult: 0
+ }
+}
+
+layer {
+  name: "up_concat_level_3"
+  type: "Concat"
+  bottom: "up_level_3_input"
+  bottom: "down_level_3_relu"
+  top: "up_concat_level_3"
+  concat_param {
+    concat_dim: 1
+  }
+}
+
+layer {
+	name: "up_level_3_conv"
+	type: "Convolution"
+	bottom: "up_concat_level_3"
+	top: "up_level_3_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 128
+		group: 8
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.01
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "up_level_3_relu"
+	type: "ReLU"
+	bottom: "up_level_3_conv_top"
+	top: "up_level_3_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+
+## Level 2, up part
+
+layer {
+  name: "up_level_3_to_2"
+  type: "Deconvolution"
+  bottom: "up_level_3_relu"
+  top: "up_level_2_input"
+  convolution_param {
+    kernel_size: 4
+	stride: 2
+    pad: 1
+    num_output: 128
+	group: 128
+    weight_filler {
+		type: "bilinear"
+	}
+	bias_term: false
+  }
+  param {
+	lr_mult: 0
+	decay_mult: 0
+ }
+}
+
+layer {
+  name: "up_concat_level_2"
+  type: "Concat"
+  bottom: "up_level_2_input"
+  bottom: "down_level_2_relu"
+  top: "up_concat_level_2"
+  concat_param {
+    concat_dim: 1
+  }
+}
+
+layer {
+	name: "up_level_2_conv"
+	type: "Convolution"
+	bottom: "up_concat_level_2"
+	top: "up_level_2_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 64
+		group: 4
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.01
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "up_level_2_relu"
+	type: "ReLU"
+	bottom: "up_level_2_conv_top"
+	top: "up_level_2_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+
+## Level 1, up part
+
+layer {
+  name: "up_level_2_to_1"
+  type: "Deconvolution"
+  bottom: "up_level_2_relu"
+  top: "up_level_1_input"
+  convolution_param {
+    kernel_size: 4
+	stride: 2
+    pad: 1
+    num_output: 64
+	group: 64
+    weight_filler {
+		type: "bilinear"
+	}
+	bias_term: false
+  }
+  param {
+	lr_mult: 0
+	decay_mult: 0
+ }
+}
+
+layer {
+  name: "up_concat_level_1"
+  type: "Concat"
+  bottom: "up_level_1_input"
+  bottom: "down_level_1_relu"
+  top: "up_concat_level_1"
+  concat_param {
+    concat_dim: 1
+  }
+}
+
+layer {
+	name: "up_level_1_conv"
+	type: "Convolution"
+	bottom: "up_concat_level_1"
+	top: "up_level_1_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 32
+		group: 2
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.01
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "up_level_1_relu"
+	type: "ReLU"
+	bottom: "up_level_1_conv_top"
+	top: "up_level_1_relu"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+
+## Level 0, up part
+
+layer {
+  name: "up_level_1_to_0"
+  type: "Deconvolution"
+  bottom: "up_level_1_relu"
+  top: "up_level_0_input"
+  convolution_param {
+    kernel_size: 4
+	stride: 2
+    pad: 1
+    num_output: 32
+	group: 32
+    weight_filler {
+		type: "bilinear"
+	}
+	bias_term: false
+  }
+  param {
+	lr_mult: 0
+	decay_mult: 0
+ }
+}
+
+layer {
+  name: "up_concat_level_0"
+  type: "Concat"
+  bottom: "up_level_0_input"
+  bottom: "down_level_0_relu"
+  top: "up_concat_level_0"
+  concat_param {
+    concat_dim: 1
+  }
+}
+
+layer {
+	name: "up_level_0_conv"
+	type: "Convolution"
+	bottom: "up_concat_level_0"
+	top: "up_level_0_conv_top"
+	#blobs_lr: 1
+	#blobs_lr: 2
+	convolution_param {
+		num_output: 1
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		weight_filler {
+			type: "gaussian"
+			std: 0.01
+		}
+		bias_filler {
+			type: "constant"
+			value: 0
+		}
+	}
+}
+
+layer {
+	name: "up_level_0_relu"
+	type: "ReLU"
+	bottom: "up_level_0_conv_top"
+	top: "result"
+	relu_param{
+		negative_slope: 0.01
+	}
+}
+
+# Compute loss
+
+# layer {
+#   name: "loss"
+#   type: "SSIMLoss"
+#   bottom: "result"
+#   bottom: "data_ground_truth"
+#   top: "final_loss"
+#   ssim_loss_param{
+# 	kernel_size: 8
+# 	stride: 1
+# 	c1: 0.0001
+# 	c2: 0.001
+#   }
+# }

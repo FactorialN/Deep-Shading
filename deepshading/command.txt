@@ -1,0 +1,12 @@
+{
+'foldername':'/Users/factorialn/Downloads/data/Data',
+'testname':'/Users/factorialn/Downloads/data/Data/tf1_in.txt',
+'testoutname':'/Users/factorialn/Downloads/data/Data/tf1_out.txt',
+'train_dir':'./train',
+'epochs':50,
+'iter_per_epoch':1,
+'batch_size':5,
+'learning_rate':10,
+'learning_rate_decay':0.995,
+'is_training':1
+}
